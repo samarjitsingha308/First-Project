@@ -1,0 +1,378 @@
+.results-display {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #4a5568;
+}
+
+.back-btn:hover {
+  background: white;
+  border-color: #667eea;
+  color: #667eea;
+  transform: translateX(-4px);
+}
+
+.results-header h2 {
+  font-size: 2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.result-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp 0.5s ease-out;
+}
+
+.result-card h3 {
+  font-size: 1.5rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.main-result {
+  grid-column: span 2;
+  text-align: center;
+  border-left: 8px solid;
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  margin: 0 auto 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.risk-band {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.probability {
+  margin: 2rem 0;
+}
+
+.probability-label {
+  display: block;
+  color: #718096;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.probability-bar-container {
+  width: 100%;
+  height: 30px;
+  background: #e2e8f0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.probability-bar {
+  height: 100%;
+  transition: width 1s ease-out;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.probability-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-top: 0.5rem;
+}
+
+.prediction-outcome {
+  font-size: 1.2rem;
+  color: #4a5568;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #edf2f7;
+  border-radius: 8px;
+}
+
+.risk-message {
+  color: #718096;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+.drivers-card {
+  grid-column: span 2;
+}
+
+.drivers-explanation {
+  color: #718096;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.drivers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.driver-item {
+  background: #f7fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #e2e8f0;
+}
+
+.driver-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.driver-rank {
+  background: #667eea;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.driver-name {
+  font-weight: 600;
+  color: #2d3748;
+  flex: 1;
+}
+
+.driver-impact {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.driver-impact.increasing {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.driver-impact.decreasing {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.driver-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.driver-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease-out;
+}
+
+.driver-bar.increasing {
+  background: linear-gradient(to right, #fc8181, #f56565);
+}
+
+.driver-bar.decreasing {
+  background: linear-gradient(to right, #68d391, #48bb78);
+}
+
+.driver-value {
+  font-family: 'Courier New', monospace;
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+.shap-legend {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.legend-color {
+  width: 30px;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.legend-color.increasing {
+  background: linear-gradient(to right, #fc8181, #f56565);
+}
+
+.legend-color.decreasing {
+  background: linear-gradient(to right, #68d391, #48bb78);
+}
+
+.recommendations-card {
+  grid-column: span 1;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recommendation-item {
+  display: flex;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.recommendation-item:hover {
+  background: #edf2f7;
+  transform: translateX(4px);
+}
+
+.rec-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rec-text {
+  color: #2d3748;
+  line-height: 1.6;
+  padding-top: 0.25rem;
+}
+
+.info-card {
+  grid-column: span 1;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-section h4 {
+  color: #4a5568;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.info-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-section li {
+  padding: 0.5rem 0;
+  color: #718096;
+  line-height: 1.5;
+}
+
+.info-section p {
+  color: #718096;
+  line-height: 1.6;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-result,
+  .drivers-card,
+  .recommendations-card,
+  .info-card {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .result-card {
+    padding: 1.5rem;
+  }
+
+  .results-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .risk-band {
+    font-size: 2rem;
+  }
+
+  .probability-value {
+    font-size: 1.5rem;
+  }
+}
