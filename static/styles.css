@@ -296,6 +296,22 @@ header h1 {
     margin-bottom: 15px;
 }
 
+.article-content-snippets {
+    margin-bottom: 15px;
+}
+
+.content-snippet {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    padding: 10px 0;
+}
+
+.content-snippet:not(:last-child) {
+    border-bottom: 1px dashed #e0e0e0;
+    padding-bottom: 12px;
+}
+
 .article-tags {
     display: flex;
     flex-wrap: wrap;

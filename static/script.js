@@ -147,9 +147,28 @@ function displaySearchResults(results, mode) {
             `;
         }
         
-        // Highlight keywords in title and content
+        // Highlight keywords in title
         const highlightedTitle = highlightKeywords(article.title, article.matched_keywords);
-        const highlightedContent = highlightKeywords(truncate(article.content, 300), article.matched_keywords);
+        
+        // Display content snippets or full content
+        let contentDisplay = '';
+        if (article.content_snippets && article.content_snippets.length > 0) {
+            // Show snippets with highlights
+            contentDisplay = article.content_snippets.map((snippet, index) => {
+                const highlightedSnippet = highlightKeywords(snippet.text, article.matched_keywords);
+                const prefix = snippet.start > 0 ? '...' : '';
+                const suffix = snippet.end < article.content.length ? '...' : '';
+                
+                return `
+                    <div class="content-snippet">
+                        ${prefix}${highlightedSnippet}${suffix}
+                    </div>
+                `;
+            }).join('');
+        } else {
+            // Fallback to truncated content
+            contentDisplay = `<div class="content-snippet">${highlightKeywords(truncate(article.content, 300), article.matched_keywords)}</div>`;
+        }
         
         return `
             <div class="article-card">
@@ -163,7 +182,9 @@ function displaySearchResults(results, mode) {
                     </div>
                     ${scoreHTML}
                 </div>
-                <p class="article-content">${highlightedContent}</p>
+                <div class="article-content-snippets">
+                    ${contentDisplay}
+                </div>
                 ${matchedKeywordsList}
                 ${article.tags.length > 0 ? `
                     <div class="article-tags">

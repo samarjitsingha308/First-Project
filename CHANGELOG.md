@@ -1,5 +1,29 @@
 # 📋 Changelog
 
+## [2.2.0] - December 29, 2025 - Snippet-Based Highlighting
+
+### ✨ Major Enhancement
+
+#### Context-Aware Snippet Display
+- **Multiple snippets**: Shows up to 3 chunks where keywords appear
+- **Context extraction**: ~200 characters around each keyword
+- **Multiple highlights**: All keyword occurrences within each snippet highlighted
+- **Smart merging**: Nearby snippets automatically merged
+- **Visual separation**: Dashed lines between snippet chunks
+- **Ellipsis indicators**: Shows when there's more content before/after
+- **Word boundaries**: Snippets start and end at word boundaries
+
+#### Modified Files
+- `search_engine.py`: Added `_extract_keyword_snippets()` method with smart chunking logic
+- `app.py`: Added `ContentSnippet` model and `content_snippets` field
+- `static/script.js`: Updated to display multiple snippets with proper formatting
+- `static/styles.css`: Added `.content-snippet` and separator styling
+
+#### Documentation
+- New: `SNIPPET_HIGHLIGHTING.md` - Complete guide to snippet-based display
+
+---
+
 ## [2.1.0] - December 29, 2025 - Keyword Highlighting
 
 ### ✨ New Features

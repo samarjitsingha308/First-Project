@@ -31,6 +31,11 @@ class SearchQuery(BaseModel):
     mode: Optional[str] = "hybrid"  # "semantic", "keyword", or "hybrid"
     semantic_weight: Optional[float] = 0.7  # Weight for semantic in hybrid mode
 
+class ContentSnippet(BaseModel):
+    start: int
+    end: int
+    text: str
+
 class ArticleResponse(BaseModel):
     id: str
     title: str
@@ -43,6 +48,8 @@ class ArticleResponse(BaseModel):
     keyword_score: Optional[float] = None
     keyword_match_ratio: Optional[float] = None
     matched_keywords: Optional[List[str]] = []
+    content_snippets: Optional[List[ContentSnippet]] = []
+    title_has_keywords: Optional[bool] = False
 
 # Storage file
 ARTICLES_FILE = "articles.json"
@@ -143,7 +150,9 @@ async def search_articles(query: SearchQuery):
             semantic_score=result.get("semantic_score"),
             keyword_score=result.get("keyword_score"),
             keyword_match_ratio=result.get("keyword_match_ratio"),
-            matched_keywords=result.get("matched_keywords", [])
+            matched_keywords=result.get("matched_keywords", []),
+            content_snippets=[ContentSnippet(**snippet) for snippet in result.get("content_snippets", [])],
+            title_has_keywords=result.get("title_has_keywords", False)
         )
         for result in results
     ]

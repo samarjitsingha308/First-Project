@@ -5,13 +5,14 @@ A modern, intelligent search engine that uses BERT (Bidirectional Encoder Repres
 ## ✨ Features
 
 - **🔀 Hybrid Search**: Combines BERT semantic search with TF-IDF keyword matching for best results
-- **🟨 Keyword Highlighting**: Matched keywords highlighted in yellow in search results (NEW!)
+- **📍 Smart Snippets**: Shows multiple chunks where keywords appear with context (NEW!)
+- **🟨 Keyword Highlighting**: All keyword occurrences highlighted in yellow within snippets
 - **🧠 BERT Semantic Search**: Understands meaning and context, not just exact words
 - **🔑 Keyword Matching**: Traditional TF-IDF search for exact keyword matches
 - **⚖️ Adjustable Balance**: Control the weight between semantic and keyword matching
 - **📝 Article Creation**: Easy-to-use interface for creating and managing articles
 - **🎯 Multiple Score Types**: See semantic, keyword, and combined similarity scores
-- **📋 Matched Terms List**: See which keywords were found in each result (NEW!)
+- **📋 Matched Terms List**: See which keywords were found in each result
 - **🏷️ Tag Support**: Organize articles with tags for better categorization
 - **💨 Fast & Efficient**: Optimized with the lightweight `all-MiniLM-L6-v2` model
 - **🎨 Modern UI**: Beautiful, responsive interface built with vanilla JavaScript

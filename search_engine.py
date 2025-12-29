@@ -139,6 +139,86 @@ class BERTSearchEngine:
         matches = query_words.intersection(text_words)
         return sorted(list(matches))
     
+    def _extract_keyword_snippets(self, text: str, keywords: list, snippet_length: int = 150) -> list:
+        """
+        Extract text snippets around keyword occurrences
+        
+        Args:
+            text: Text to search in
+            keywords: List of keywords to find
+            snippet_length: Characters to show around each keyword
+        
+        Returns:
+            List of snippets with keyword positions
+        """
+        if not keywords or not text:
+            return []
+        
+        snippets = []
+        text_lower = text.lower()
+        
+        # Find all keyword positions
+        keyword_positions = []
+        for keyword in keywords:
+            # Find all occurrences of this keyword
+            pattern = re.compile(r'\b' + re.escape(keyword) + r'\b', re.IGNORECASE)
+            for match in pattern.finditer(text):
+                keyword_positions.append({
+                    'start': match.start(),
+                    'end': match.end(),
+                    'keyword': keyword
+                })
+        
+        # Sort by position
+        keyword_positions.sort(key=lambda x: x['start'])
+        
+        if not keyword_positions:
+            return []
+        
+        # Merge overlapping or nearby snippets
+        merged_snippets = []
+        current_start = None
+        current_end = None
+        
+        for pos in keyword_positions:
+            # Calculate snippet boundaries
+            snippet_start = max(0, pos['start'] - snippet_length // 2)
+            snippet_end = min(len(text), pos['end'] + snippet_length // 2)
+            
+            # Adjust to word boundaries
+            while snippet_start > 0 and text[snippet_start] not in ' \n\t.,;:!?':
+                snippet_start -= 1
+            while snippet_end < len(text) and text[snippet_end] not in ' \n\t.,;:!?':
+                snippet_end += 1
+            
+            if current_start is None:
+                # First snippet
+                current_start = snippet_start
+                current_end = snippet_end
+            elif snippet_start <= current_end + 50:  # Merge if close
+                # Extend current snippet
+                current_end = max(current_end, snippet_end)
+            else:
+                # Save current snippet and start new one
+                merged_snippets.append({
+                    'start': current_start,
+                    'end': current_end,
+                    'text': text[current_start:current_end].strip()
+                })
+                current_start = snippet_start
+                current_end = snippet_end
+        
+        # Add last snippet
+        if current_start is not None:
+            merged_snippets.append({
+                'start': current_start,
+                'end': current_end,
+                'text': text[current_start:current_end].strip()
+            })
+        
+        # Limit to 3 most relevant snippets
+        return merged_snippets[:3]
+    
     def search(self, query: str, top_k: int = 5, mode: str = "hybrid", 
                semantic_weight: float = 0.7) -> List[Dict[str, Any]]:
         """
@@ -191,6 +271,21 @@ class BERTSearchEngine:
             
             # Find matched keywords for highlighting
             article["matched_keywords"] = self._find_matched_keywords(query, searchable_text)
+            
+            # Extract keyword snippets from content
+            content = article.get("content", "")
+            title = article.get("title", "")
+            
+            # Get snippets from content
+            article["content_snippets"] = self._extract_keyword_snippets(
+                content, 
+                article["matched_keywords"],
+                snippet_length=200
+            )
+            
+            # Check if title has keywords
+            title_keywords = self._find_matched_keywords(query, title)
+            article["title_has_keywords"] = len(title_keywords) > 0
             
             results.append(article)
         
