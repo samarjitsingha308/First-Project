@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERT-Powered Search Engine</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 BERT Search Engine</h1>
+            <p class="subtitle">Semantic search powered by AI</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('search')">Search Articles</button>
+            <button class="tab-btn" onclick="showTab('create')">Create Article</button>
+            <button class="tab-btn" onclick="showTab('browse')">Browse All</button>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="search-tab" class="tab-content active">
+            <div class="search-section">
+                <h2>Search for Articles</h2>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Enter keywords or phrases to search..." />
+                    <button onclick="searchArticles()">Search</button>
+                </div>
+                <div class="search-options">
+                    <label>
+                        Results to show:
+                        <select id="top-k">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="search-results"></div>
+            </div>
+        </div>
+
+        <!-- Create Article Tab -->
+        <div id="create-tab" class="tab-content">
+            <div class="create-section">
+                <h2>Create New Article</h2>
+                <form id="article-form" onsubmit="createArticle(event)">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" required placeholder="Enter article title" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" placeholder="Your name (optional)" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <input type="text" id="tags" placeholder="Comma-separated tags (e.g., technology, AI, machine learning)" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">Content *</label>
+                        <textarea id="content" required rows="10" placeholder="Write your article content here..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Create Article</button>
+                </form>
+                <div id="create-message"></div>
+            </div>
+        </div>
+
+        <!-- Browse Tab -->
+        <div id="browse-tab" class="tab-content">
+            <div class="browse-section">
+                <h2>All Articles</h2>
+                <button onclick="loadAllArticles()" class="refresh-btn">Refresh</button>
+                <div id="all-articles"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
