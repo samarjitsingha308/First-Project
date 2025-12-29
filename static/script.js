@@ -36,6 +36,8 @@ function hideLoading() {
 async function searchArticles() {
     const query = document.getElementById('search-input').value.trim();
     const topK = parseInt(document.getElementById('top-k').value);
+    const mode = document.getElementById('search-mode').value;
+    const semanticWeight = parseInt(document.getElementById('semantic-weight').value) / 100;
     const resultsDiv = document.getElementById('search-results');
     
     if (!query) {
@@ -51,7 +53,12 @@ async function searchArticles() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ query, top_k: topK })
+            body: JSON.stringify({ 
+                query, 
+                top_k: topK,
+                mode: mode,
+                semantic_weight: semanticWeight
+            })
         });
         
         if (!response.ok) {
@@ -59,7 +66,7 @@ async function searchArticles() {
         }
         
         const results = await response.json();
-        displaySearchResults(results);
+        displaySearchResults(results, mode);
     } catch (error) {
         resultsDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
     } finally {
@@ -68,7 +75,7 @@ async function searchArticles() {
 }
 
 // Display Search Results
-function displaySearchResults(results) {
+function displaySearchResults(results, mode) {
     const resultsDiv = document.getElementById('search-results');
     
     if (results.length === 0) {
@@ -81,27 +88,73 @@ function displaySearchResults(results) {
         return;
     }
     
-    resultsDiv.innerHTML = results.map(article => `
-        <div class="article-card">
-            <div class="article-header">
-                <div>
-                    <h3 class="article-title">${escapeHtml(article.title)}</h3>
-                    <p class="article-meta">
-                        By ${escapeHtml(article.author)} • ${formatDate(article.created_at)}
-                    </p>
+    resultsDiv.innerHTML = results.map(article => {
+        // Generate score badges based on mode
+        let scoreHTML = '';
+        
+        if (mode === 'hybrid') {
+            scoreHTML = `
+                <div class="score-badges">
+                    <div class="similarity-score hybrid">
+                        ${(article.similarity_score * 100).toFixed(1)}% Overall
+                    </div>
+                    <div class="score-detail semantic">
+                        🧠 ${(article.semantic_score * 100).toFixed(1)}%
+                    </div>
+                    <div class="score-detail keyword">
+                        🔑 ${(article.keyword_score * 100).toFixed(1)}%
+                    </div>
                 </div>
-                <div class="similarity-score">
-                    ${(article.similarity_score * 100).toFixed(1)}% Match
+            `;
+        } else if (mode === 'semantic') {
+            scoreHTML = `
+                <div class="score-badges">
+                    <div class="similarity-score semantic">
+                        🧠 ${(article.semantic_score * 100).toFixed(1)}% Semantic
+                    </div>
                 </div>
+            `;
+        } else {
+            scoreHTML = `
+                <div class="score-badges">
+                    <div class="similarity-score keyword">
+                        🔑 ${(article.keyword_score * 100).toFixed(1)}% Keyword
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add keyword match indicator if there's direct keyword match
+        let keywordMatchBadge = '';
+        if (article.keyword_match_ratio > 0) {
+            keywordMatchBadge = `
+                <span class="keyword-match-badge" title="Direct keyword matches found">
+                    ✓ ${Math.round(article.keyword_match_ratio * 100)}% keywords matched
+                </span>
+            `;
+        }
+        
+        return `
+            <div class="article-card">
+                <div class="article-header">
+                    <div>
+                        <h3 class="article-title">${escapeHtml(article.title)}</h3>
+                        <p class="article-meta">
+                            By ${escapeHtml(article.author)} • ${formatDate(article.created_at)}
+                        </p>
+                        ${keywordMatchBadge}
+                    </div>
+                    ${scoreHTML}
+                </div>
+                <p class="article-content">${escapeHtml(truncate(article.content, 300))}</p>
+                ${article.tags.length > 0 ? `
+                    <div class="article-tags">
+                        ${article.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                ` : ''}
             </div>
-            <p class="article-content">${escapeHtml(truncate(article.content, 300))}</p>
-            ${article.tags.length > 0 ? `
-                <div class="article-tags">
-                    ${article.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
-                </div>
-            ` : ''}
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Create Article
@@ -257,7 +310,7 @@ function formatDate(dateString) {
     });
 }
 
-// Allow search on Enter key
+// Initialize page
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
@@ -265,6 +318,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') {
                 searchArticles();
             }
+        });
+    }
+    
+    // Handle search mode change
+    const searchMode = document.getElementById('search-mode');
+    const weightLabel = document.getElementById('weight-label');
+    
+    if (searchMode && weightLabel) {
+        searchMode.addEventListener('change', () => {
+            // Show/hide weight slider based on mode
+            if (searchMode.value === 'hybrid') {
+                weightLabel.style.display = 'block';
+            } else {
+                weightLabel.style.display = 'none';
+            }
+        });
+    }
+    
+    // Handle weight slider
+    const weightSlider = document.getElementById('semantic-weight');
+    const weightValue = document.getElementById('weight-value');
+    
+    if (weightSlider && weightValue) {
+        weightSlider.addEventListener('input', () => {
+            weightValue.textContent = weightSlider.value + '%';
         });
     }
 });

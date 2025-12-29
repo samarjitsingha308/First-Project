@@ -48,13 +48,20 @@ This will add 10 sample articles covering various topics like AI, health, web de
 
 ### Try These Searches
 
-After adding sample data, try these semantic search queries:
+After adding sample data, try these searches in different modes:
 
-- "artificial intelligence" → Find ML and AI articles
-- "staying healthy" → Find nutrition and wellness articles
-- "building websites" → Find web development content
-- "stress relief" → Find meditation and mindfulness articles
-- "sustainable energy" → Find environmental and renewable energy articles
+**Hybrid Mode** (Best overall results):
+- "artificial intelligence" → Finds AI, ML, neural networks
+- "staying healthy" → Finds nutrition, wellness, fitness
+- "building websites" → Finds web dev, HTML, CSS
+
+**Semantic Mode** (Concept matching):
+- "staying fit" → Finds exercise, health, wellness (related concepts)
+- "eco-friendly" → Finds sustainability, environment, green energy
+
+**Keyword Mode** (Exact matching):
+- "Python programming" → Finds exact mentions of Python
+- "machine learning" → Finds exact term matches
 
 ## 📱 Using the Application
 
@@ -68,10 +75,18 @@ After adding sample data, try these semantic search queries:
 ### Searching Articles
 
 1. Go to **"Search Articles"** tab
-2. Enter your search query (keywords or natural language)
-3. Select number of results (5, 10, 15, or 20)
-4. Click **"Search"** button
-5. Results show similarity scores (higher = better match)
+2. Choose search mode:
+   - **Hybrid** (default): Best of both semantic and keyword
+   - **Semantic**: AI understanding of meaning
+   - **Keyword**: Traditional exact matching
+3. Adjust semantic weight slider (Hybrid mode only)
+4. Enter your search query
+5. Click **"Search"** button
+6. Results show multiple scores:
+   - Overall match percentage
+   - 🧠 Semantic score (BERT)
+   - 🔑 Keyword score (TF-IDF)
+   - Keyword match ratio
 
 ### Browsing All Articles
 

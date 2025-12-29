@@ -4,9 +4,12 @@ A modern, intelligent search engine that uses BERT (Bidirectional Encoder Repres
 
 ## ✨ Features
 
-- **🧠 BERT-Powered Semantic Search**: Uses sentence transformers to understand the meaning behind your queries, not just keyword matching
+- **🔀 Hybrid Search**: Combines BERT semantic search with TF-IDF keyword matching for best results
+- **🧠 BERT Semantic Search**: Understands meaning and context, not just exact words
+- **🔑 Keyword Matching**: Traditional TF-IDF search for exact keyword matches
+- **⚖️ Adjustable Balance**: Control the weight between semantic and keyword matching
 - **📝 Article Creation**: Easy-to-use interface for creating and managing articles
-- **🎯 Similarity Scoring**: See how well each result matches your search query
+- **🎯 Multiple Score Types**: See semantic, keyword, and combined similarity scores
 - **🏷️ Tag Support**: Organize articles with tags for better categorization
 - **💨 Fast & Efficient**: Optimized with the lightweight `all-MiniLM-L6-v2` model
 - **🎨 Modern UI**: Beautiful, responsive interface built with vanilla JavaScript
@@ -126,17 +129,41 @@ The search engine will:
   }
   ```
 
-## 🎯 How BERT Search Works
+## 🎯 How Hybrid Search Works
 
-1. **Indexing**: When articles are created, the BERT model converts them into numerical vectors (embeddings) that capture semantic meaning
-2. **Query Processing**: Your search query is also converted into a vector
-3. **Similarity Calculation**: The system calculates cosine similarity between the query vector and all article vectors
-4. **Ranking**: Results are ranked by similarity score (0-100%)
+### Three Search Modes
 
-This approach means:
-- "artificial intelligence" will match "machine learning" and "AI"
-- "how to cook pasta" will match "pasta cooking instructions"
-- Context and meaning matter, not just exact word matches
+1. **Hybrid Mode (Default)** - Best of both worlds
+   - Combines BERT semantic understanding with TF-IDF keyword matching
+   - Adjustable weight slider (default: 70% semantic, 30% keyword)
+   - Finds both conceptually similar AND exact keyword matches
+
+2. **Semantic Mode** - AI-powered understanding
+   - Pure BERT embeddings
+   - Understands synonyms and related concepts
+   - "AI" matches "machine learning", "neural networks"
+
+3. **Keyword Mode** - Traditional search
+   - TF-IDF based keyword matching
+   - Best for exact term searches
+   - Fast and precise for specific words
+
+### How It Works
+
+**Semantic Search (BERT)**:
+1. Articles converted to 384-dimensional vectors
+2. Query converted to same vector space
+3. Cosine similarity measures semantic closeness
+
+**Keyword Search (TF-IDF)**:
+1. Articles analyzed for term frequency
+2. Query terms weighted by importance
+3. TF-IDF scores measure keyword relevance
+
+**Hybrid Search**:
+- Combines both scores with adjustable weighting
+- Default: 70% semantic + 30% keyword
+- Customizable via UI slider
 
 ## 📊 Example Queries
 

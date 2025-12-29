@@ -30,6 +30,20 @@
                 </div>
                 <div class="search-options">
                     <label>
+                        Search Mode:
+                        <select id="search-mode">
+                            <option value="hybrid">Hybrid (Semantic + Keyword)</option>
+                            <option value="semantic">Semantic Only (BERT)</option>
+                            <option value="keyword">Keyword Only (TF-IDF)</option>
+                        </select>
+                    </label>
+                    
+                    <label id="weight-label">
+                        Semantic Weight: <span id="weight-value">70%</span>
+                        <input type="range" id="semantic-weight" min="0" max="100" value="70" />
+                    </label>
+                    
+                    <label>
                         Results to show:
                         <select id="top-k">
                             <option value="5">5</option>

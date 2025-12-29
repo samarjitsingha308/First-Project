@@ -28,6 +28,8 @@ class Article(BaseModel):
 class SearchQuery(BaseModel):
     query: str
     top_k: Optional[int] = 5
+    mode: Optional[str] = "hybrid"  # "semantic", "keyword", or "hybrid"
+    semantic_weight: Optional[float] = 0.7  # Weight for semantic in hybrid mode
 
 class ArticleResponse(BaseModel):
     id: str
@@ -37,6 +39,9 @@ class ArticleResponse(BaseModel):
     tags: List[str]
     created_at: str
     similarity_score: Optional[float] = None
+    semantic_score: Optional[float] = None
+    keyword_score: Optional[float] = None
+    keyword_match_ratio: Optional[float] = None
 
 # Storage file
 ARTICLES_FILE = "articles.json"
@@ -106,11 +111,24 @@ async def get_article(article_id: str):
 
 @app.post("/api/search", response_model=List[ArticleResponse])
 async def search_articles(query: SearchQuery):
-    """Search articles using BERT semantic search"""
+    """Search articles using hybrid search (semantic + keyword matching)"""
     if not query.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     
-    results = search_engine.search(query.query, top_k=query.top_k)
+    # Validate mode
+    if query.mode not in ["semantic", "keyword", "hybrid"]:
+        raise HTTPException(status_code=400, detail="Mode must be 'semantic', 'keyword', or 'hybrid'")
+    
+    # Validate semantic_weight
+    if not 0 <= query.semantic_weight <= 1:
+        raise HTTPException(status_code=400, detail="semantic_weight must be between 0 and 1")
+    
+    results = search_engine.search(
+        query.query, 
+        top_k=query.top_k,
+        mode=query.mode,
+        semantic_weight=query.semantic_weight
+    )
     
     return [
         ArticleResponse(
@@ -120,7 +138,10 @@ async def search_articles(query: SearchQuery):
             author=result["author"],
             tags=result["tags"],
             created_at=result["created_at"],
-            similarity_score=result["similarity_score"]
+            similarity_score=result.get("similarity_score"),
+            semantic_score=result.get("semantic_score"),
+            keyword_score=result.get("keyword_score"),
+            keyword_match_ratio=result.get("keyword_match_ratio")
         )
         for result in results
     ]

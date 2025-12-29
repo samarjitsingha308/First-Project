@@ -4,12 +4,30 @@ Complete list of features in the BERT-Powered Search Engine
 
 ## 🔍 Search Features
 
-### Semantic Search
+### Hybrid Search (New!)
+- **Three search modes**: Hybrid, Semantic-only, or Keyword-only
+- **Adjustable balance**: Slider to control semantic vs keyword weight (0-100%)
+- **Multiple scores**: See semantic score, keyword score, and combined score
+- **Keyword match indicator**: Shows percentage of exact term matches
+- **Best of both worlds**: Combines AI understanding with traditional matching
+
+### Semantic Search (BERT)
 - **BERT-powered understanding**: Goes beyond keyword matching to understand meaning
 - **Natural language queries**: Ask questions in plain English
-- **Relevance scoring**: Each result shows similarity percentage (0-100%)
+- **Contextual matching**: Finds related concepts and synonyms
+- **384-dimensional embeddings**: Rich semantic representation
+
+### Keyword Search (TF-IDF)
+- **Traditional matching**: Exact word and phrase matching
+- **TF-IDF scoring**: Weighted by term importance
+- **Fast computation**: No neural network inference needed
+- **Precise results**: Best for specific technical terms
+
+### Search Controls
+- **Relevance scoring**: Each result shows multiple similarity scores (0-100%)
 - **Configurable results**: Choose to display 5, 10, 15, or 20 results
 - **Fast performance**: Sub-second search after initial model load
+- **Mode switching**: Instant switch between search modes
 
 ### Search Examples
 
