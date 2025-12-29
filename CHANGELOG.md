@@ -1,5 +1,28 @@
 # 📋 Changelog
 
+## [2.1.0] - December 29, 2025 - Keyword Highlighting
+
+### ✨ New Features
+
+#### Keyword Highlighting
+- **Visual highlighting**: Matched keywords highlighted in yellow in results
+- **Title highlighting**: Keywords highlighted in article titles
+- **Content highlighting**: Keywords highlighted in content previews
+- **Matched keywords list**: Display list of matched terms below each result
+- **Case-insensitive matching**: Highlights regardless of case
+- **Safe HTML**: XSS-protected implementation
+
+#### Modified Files
+- `search_engine.py`: Added `_find_matched_keywords()` method
+- `app.py`: Added `matched_keywords` to ArticleResponse
+- `static/script.js`: Added `highlightKeywords()` function and matched keywords display
+- `static/styles.css`: Added `.highlight`, `.matched-keywords-list`, and `.matched-keyword` styles
+
+#### Documentation
+- New: `KEYWORD_HIGHLIGHTING.md` - Complete guide to keyword highlighting
+
+---
+
 ## [2.0.0] - December 29, 2025 - Hybrid Search Release
 
 ### 🎉 Major Features Added

@@ -134,11 +134,28 @@ function displaySearchResults(results, mode) {
             `;
         }
         
+        // Show matched keywords if any
+        let matchedKeywordsList = '';
+        if (article.matched_keywords && article.matched_keywords.length > 0) {
+            matchedKeywordsList = `
+                <div class="matched-keywords-list">
+                    <span class="matched-label">Matched terms:</span>
+                    ${article.matched_keywords.map(kw => 
+                        `<span class="matched-keyword">${escapeHtml(kw)}</span>`
+                    ).join('')}
+                </div>
+            `;
+        }
+        
+        // Highlight keywords in title and content
+        const highlightedTitle = highlightKeywords(article.title, article.matched_keywords);
+        const highlightedContent = highlightKeywords(truncate(article.content, 300), article.matched_keywords);
+        
         return `
             <div class="article-card">
                 <div class="article-header">
                     <div>
-                        <h3 class="article-title">${escapeHtml(article.title)}</h3>
+                        <h3 class="article-title">${highlightedTitle}</h3>
                         <p class="article-meta">
                             By ${escapeHtml(article.author)} • ${formatDate(article.created_at)}
                         </p>
@@ -146,7 +163,8 @@ function displaySearchResults(results, mode) {
                     </div>
                     ${scoreHTML}
                 </div>
-                <p class="article-content">${escapeHtml(truncate(article.content, 300))}</p>
+                <p class="article-content">${highlightedContent}</p>
+                ${matchedKeywordsList}
                 ${article.tags.length > 0 ? `
                     <div class="article-tags">
                         ${article.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
@@ -294,6 +312,26 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function highlightKeywords(text, keywords) {
+    if (!keywords || keywords.length === 0) {
+        return escapeHtml(text);
+    }
+    
+    // Escape HTML first for safety
+    let result = escapeHtml(text);
+    
+    // Sort keywords by length (longest first) to avoid partial matches
+    const sortedKeywords = [...keywords].sort((a, b) => b.length - a.length);
+    
+    // Highlight each keyword (case-insensitive)
+    sortedKeywords.forEach(keyword => {
+        const regex = new RegExp(`(${keyword})`, 'gi');
+        result = result.replace(regex, '<mark class="highlight">$1</mark>');
+    });
+    
+    return result;
 }
 
 function truncate(text, maxLength) {

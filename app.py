@@ -42,6 +42,7 @@ class ArticleResponse(BaseModel):
     semantic_score: Optional[float] = None
     keyword_score: Optional[float] = None
     keyword_match_ratio: Optional[float] = None
+    matched_keywords: Optional[List[str]] = []
 
 # Storage file
 ARTICLES_FILE = "articles.json"
@@ -141,7 +142,8 @@ async def search_articles(query: SearchQuery):
             similarity_score=result.get("similarity_score"),
             semantic_score=result.get("semantic_score"),
             keyword_score=result.get("keyword_score"),
-            keyword_match_ratio=result.get("keyword_match_ratio")
+            keyword_match_ratio=result.get("keyword_match_ratio"),
+            matched_keywords=result.get("matched_keywords", [])
         )
         for result in results
     ]

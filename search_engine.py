@@ -122,6 +122,23 @@ class BERTSearchEngine:
         matches = query_words.intersection(text_words)
         return len(matches) / len(query_words)
     
+    def _find_matched_keywords(self, query: str, text: str) -> list:
+        """
+        Find which keywords from the query are present in the text
+        
+        Args:
+            query: Search query
+            text: Text to search in
+        
+        Returns:
+            List of matched keywords
+        """
+        query_words = set(re.findall(r'\w+', query.lower()))
+        text_words = set(re.findall(r'\w+', text.lower()))
+        
+        matches = query_words.intersection(text_words)
+        return sorted(list(matches))
+    
     def search(self, query: str, top_k: int = 5, mode: str = "hybrid", 
                semantic_weight: float = 0.7) -> List[Dict[str, Any]]:
         """
@@ -171,6 +188,9 @@ class BERTSearchEngine:
             # Add simple keyword match info
             searchable_text = self.searchable_texts[idx]
             article["keyword_match_ratio"] = self._simple_keyword_match(query, searchable_text)
+            
+            # Find matched keywords for highlighting
+            article["matched_keywords"] = self._find_matched_keywords(query, searchable_text)
             
             results.append(article)
         
